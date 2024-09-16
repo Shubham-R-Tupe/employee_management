@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Employee Management',
+      
       theme: buildThemeData(),
       home: const HomeScreenView(),
     );

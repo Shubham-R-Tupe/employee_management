@@ -97,6 +97,7 @@ class EmployeeListViewModel extends ChangeNotifier {
     }
   }
 
+
   void addEmployee(EmployeeModel employee) {
     _employees.add(employee);
     notifyListeners();

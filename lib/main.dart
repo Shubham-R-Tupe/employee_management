@@ -3,8 +3,8 @@ import 'package:employee_management/View_Model/employee_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'View_Model/employee_form_view_model.dart';
+import 'Views/get_device_info_view.dart';
 import 'Views/home_screen_view.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +27,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Employee Management',
-      
       theme: buildThemeData(),
-      home: const HomeScreenView(),
+      home: const DeviceInfoScreen(),
     );
   }
 }

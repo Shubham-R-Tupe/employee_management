@@ -1,11 +1,17 @@
+import 'package:employee_management/data/remote/country_repository_impl.dart';
+import 'package:employee_management/data/remote/employee_repository_implementation.dart';
+import 'package:employee_management/domain/usecases/country_usecase.dart';
+import 'package:employee_management/domain/usecases/employee_usecase.dart';
 import 'package:flutter/foundation.dart';
 import '../Models/country_model.dart';
-import '../Services/api_services.dart';
 import '../Utils/utils.dart';
 import '../models/employee_model.dart';
 
 class EmployeeFormViewModel extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
+  final CountryUsecase countryUseCase=CountryUsecase(CountryRepositoryImpl());
+  final EmployeeUseCase employeeUseCase=EmployeeUseCase(EmployeeRepositoryImpl());
+
+
   bool _isLoading = false;
   String _error = '';
   List<CountryModel> _countries = [];
@@ -22,7 +28,7 @@ class EmployeeFormViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _countries = await _apiService.getCountries();
+      _countries = await countryUseCase.getCountries();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -47,7 +53,7 @@ class EmployeeFormViewModel extends ChangeNotifier {
         'district': employee.district,
       };
 
-      await _apiService.createEmployee(employeeData);
+      await employeeUseCase.createEmployee(employeeData);
       _isLoading = false;
       notifyListeners();
       Utils.flutterToast('Employee created successfully');
@@ -75,7 +81,7 @@ class EmployeeFormViewModel extends ChangeNotifier {
         'district': employee.district,
       };
 
-      await _apiService.updateEmployee(id, employeeData);
+      await employeeUseCase.updateEmployee(id, employeeData);
       _isLoading = false;
       notifyListeners();
       Utils.flutterToast('Employee updated successfully');

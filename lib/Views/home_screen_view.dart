@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../View_Model/employee_list_view_model.dart';
-import '../models/employee_model.dart';
+
 import '../Utils/utils.dart';
+import '../models/employee_model.dart';
 import 'add_edit_employee_screen.dart';
 import 'employee_details_screen.dart';
 

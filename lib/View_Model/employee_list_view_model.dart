@@ -1,10 +1,17 @@
 import 'package:flutter/foundation.dart';
-import '../Services/api_services.dart';
 import '../Utils/utils.dart';
+import '../data/remote/country_repository_impl.dart';
+import '../data/remote/employee_repository_implementation.dart';
+import '../domain/usecases/country_usecase.dart';
+import '../domain/usecases/employee_usecase.dart';
 import '../models/employee_model.dart';
 
 class EmployeeListViewModel extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
+  // final ApiService _apiService = ApiService();
+  final CountryUsecase countryUseCase = CountryUsecase(CountryRepositoryImpl());
+  final EmployeeUseCase employeeUseCase =
+      EmployeeUseCase(EmployeeRepositoryImpl());
+
   List<EmployeeModel> _employees = [];
   EmployeeModel? _searchedEmployee;
   bool _isLoading = false;
@@ -31,7 +38,7 @@ class EmployeeListViewModel extends ChangeNotifier {
 
     try {
       List<EmployeeModel> fetchedEmployees =
-          await _apiService.getEmployees(page: page, limit: limit);
+          await employeeUseCase.getEmployees(page: page, limit: limit);
 
       if (fetchedEmployees.isEmpty) {
         _hasMoreEmployees = false;
@@ -40,6 +47,10 @@ class EmployeeListViewModel extends ChangeNotifier {
           _employees = fetchedEmployees;
         } else {
           _employees.addAll(fetchedEmployees);
+
+          _employees = List.from(_employees.reversed);
+          // _employees.sort((a, b) => a.id!.compareTo(b.id!));
+          // _employees.reversed;
         }
         _currentPage = page;
       }
@@ -68,7 +79,7 @@ class EmployeeListViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _searchedEmployee = await _apiService.getEmployeeById(id);
+      _searchedEmployee = await employeeUseCase.getEmployeeById(id);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -86,7 +97,7 @@ class EmployeeListViewModel extends ChangeNotifier {
 
   Future<void> deleteEmployee(String id) async {
     try {
-      await _apiService.deleteEmployee(id);
+      await employeeUseCase.deleteEmployee(id);
       _employees.removeWhere((employee) => employee.id == id);
       notifyListeners();
       Utils.flutterToast('Employee deleted successfully');
@@ -97,9 +108,9 @@ class EmployeeListViewModel extends ChangeNotifier {
     }
   }
 
-
   void addEmployee(EmployeeModel employee) {
-    _employees.add(employee);
+    _employees.insert(0, employee);
+
     notifyListeners();
   }
 
